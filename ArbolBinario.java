@@ -38,6 +38,23 @@ public abstract class ArbolBinario<T> implements Coleccion<T> {
             derecho = hijo;
             if (hijo != null) hijo.padre = this;
         }
+
+        @Override
+        public boolean equals(Object o) {
+            if(this == o){
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
+            @SuppressWarnings("unchecked")
+            Vertice vertice = (Vertice) o;
+            if(this.elemento == null){
+                return vertice.elemento == null;
+            }
+            return this.elemento.equals(vertice.elemento);
+        }
+
     }
 
     protected Vertice raiz;
