@@ -89,7 +89,7 @@ public class ArbolBinarioCompleto<T> extends ArbolBinario<T> {
         Cola<Vertice> cola = new Cola<Vertice>();
         cola.meter(raiz);
         while (!cola.estaVacia()) {
-            Vertice actual = cola.sacar()
+            Vertice actual = cola.sacar();
             ultimoVertice = actual;
             if (actual.elemento.equals(elemento)) {
                 eliminar = actual;
@@ -146,23 +146,75 @@ public class ArbolBinarioCompleto<T> extends ArbolBinario<T> {
         ultimoAgregado = ultimo;
     }
 
-
+    /**
+     * Busca si un elemento pertenece al árbol.
+     * @param elemento el elemento a buscar en el arbol.
+     * @return true en caso de que el elemento se encuentre en el arbol, false en caso contrario.
+     */
     @Override
     public boolean buscar(T elemento) {
-        /*Aqui va tu codigo*/
+        return buscar(elemento, raiz);
     }
 
+    /**
+     * Busca un elemento en el arbol de forma recursiva, buscando vertice por vertice.
+     * @param elemento el elemento a buscar en el arbol.
+     * @param v el vertice a partir del cual se hara la busqueda.
+     * @return true en caso de que el elemento se encuentre en el arbol, false en caso contrario.
+     */
     private boolean buscar(T elemento, Vertice v){
-        /*Aqui va tu codigo*/    
+        if (v == null) {
+            return false;
+        }
+        if (v.elemento.equals(elemento)) {
+            return true;
+        }
+        return buscar(elemento, v.izquierdo) || buscar(elemento, v.derecho);    
     }
 
+    /**
+     * Devuelve el arbol en forma de lista utilizando el recorrido BFS.
+     * @return Una lista doblemente ligada que contiene los elementos del arbol siguiendo el orden de un recorrido BFS.
+     */
     @Override
     public ListaDoblementeLigada<T> devolverRecorrido() {
-        /*Aqui va tu codigo*/
+        ListaDoblementeLigada<T> recorrido = new ListaDoblementeLigada<>();
+
+        if (estaVacio()) {
+            return recorrido;
+        }
+
+        Cola<Vertice> cola = new Cola<>();
+        cola.meter(raiz);
+
+        while (!cola.estaVacia()) {
+            Vertice actual = cola.sacar();
+            recorrido.insertarFinal(actual.elemento);
+
+            if (actual.izquierdo != null) {
+                cola.meter(actual.izquierdo);
+            }
+            if (actual.derecho != null) {
+                cola.meter(actual.derecho);
+            }
+        }
+
+        return recorrido;
     }
 
+    /**
+     * Inserta un nuevo vertice en el primer espacio izquierdo disponible dentro del subarbol binario completo inducido por un vertice V .
+     * @param desde El vertice desde el cual sera el subarbol inducido
+     * @param nuevo El vertice a agregar
+     */
     private void agregaEnPrimerEspacioIzquierdo(Vertice desde, Vertice nuevo) {
-        /*Aqui va tu codigo*/
-    }
+        while (desde.izquierdo != null) {
+            desde = desde.izquierdo;
+        }
+        desde.izquierdo = nuevo;
+        nuevo.padre = desde;
+        ultimoAgregado = nuevo;
+        tamanio++;
+        }
 
 }
