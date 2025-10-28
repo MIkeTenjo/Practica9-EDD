@@ -55,6 +55,7 @@ public class ArbolBinarioCompleto<T> extends ArbolBinario<T> {
         }else{
             Vertice vi = ultimoAgregado;
             if (vi.esHijoIzquierdo()) {
+                n.padre = vi.padre;
                 vi.padre.derecho = n;
                 ultimoAgregado = n;
                 tamanio++;
