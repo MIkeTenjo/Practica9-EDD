@@ -32,7 +32,7 @@ public class ArbolBinarioCompleto<T> extends ArbolBinario<T> {
      * en otro caso.
      */
     private boolean esRaiz(Vertice vertice){
-        return vertice.padre == null && raiz.equals(vertice);
+        return raiz != null && vertice != null && vertice.padre == null && raiz.equals(vertice);
     }
 
     /**
@@ -41,7 +41,7 @@ public class ArbolBinarioCompleto<T> extends ArbolBinario<T> {
      * 
      * @param elemento El elemento a insertar en el árbol en el último nivel,
      * lo más a lo izquierda posible.
-     * @throws IllegalArgumetnException Si el elemento es nulo.
+     * @throws IllegalArgumentException Si el elemento es nulo.
      */
     @Override
     public void insertar(T elemento) {
@@ -53,16 +53,20 @@ public class ArbolBinarioCompleto<T> extends ArbolBinario<T> {
             raiz = n;
             ultimoAgregado = n;
         }else{
-            if (ultimoAgregado.esHijoIzquierdo()) {
-                ultimoAgregado.padre.derecho = n;
+            Vertice vi = ultimoAgregado;
+            if (vi.esHijoIzquierdo()) {
+                vi.padre.derecho = n;
                 ultimoAgregado = n;
-            }else{
-                Vertice pua = ultimoAgregado.padre;
-                if (!esRaiz(pua)) {
-                    pua = pua.padre.derecho;
-                }
-                agregaEnPrimerEspacioIzquierdo(pua, n);
+                tamanio++;
+                return;
             }
+            while (vi.esHijoDerecho()) {
+                vi = vi.padre;
+            }
+            if (!esRaiz(vi)) {
+                vi = vi.padre.derecho;
+            }
+            agregaEnPrimerEspacioIzquierdo(vi, n);
         }
         tamanio++;
     }
@@ -72,9 +76,9 @@ public class ArbolBinarioCompleto<T> extends ArbolBinario<T> {
      * de ser completo.
      * 
      * @param elemento El elemento a eliminar del árbol.
-     * @param IllegalArgumentException Si el elemento a querer eliminar
+     * @throws IllegalArgumentException Si el elemento a querer eliminar
      * es nulo.
-     * @param NoSuchElementException Si el árbol está vacío.
+     * @throws NoSuchElementException Si el árbol está vacío.
      */
     @Override
     public void eliminar(T elemento) {
@@ -98,7 +102,7 @@ public class ArbolBinarioCompleto<T> extends ArbolBinario<T> {
                 cola.meter(actual.izquierdo);
             }
             if (actual.derecho != null) {
-                cola.meter(actual.izquierdo);
+                cola.meter(actual.derecho);
             }
         }
         if (eliminar == null) {
@@ -214,7 +218,6 @@ public class ArbolBinarioCompleto<T> extends ArbolBinario<T> {
         desde.izquierdo = nuevo;
         nuevo.padre = desde;
         ultimoAgregado = nuevo;
-        tamanio++;
-        }
+    }
 
 }
